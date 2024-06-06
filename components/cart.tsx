@@ -5,6 +5,7 @@ import React from "react";
 import { useAtom } from "jotai";
 import { cartAtom } from "@/atoms/productsAtoms";
 import { CartItem } from "@/lib/types";
+import { nanoid } from "nanoid";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useAtom(cartAtom);
@@ -27,7 +28,7 @@ const Cart = () => {
         <div className="col-span-8">
           {cartItems.map((item: CartItem) => (
             <div
-              key={item.product.id}
+              key={`${item.product.id}-${nanoid()}`}
               className="bg-white p-4 rounded-md shadow-md flex items-center mb-4"
             >
               <div className="flex-shrink-0 w-16 h-16">
@@ -112,14 +113,15 @@ const Cart = () => {
                   .toFixed(2)}
               </span>
             </div>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md w-full mt-4"
+            {/* <button
+              disabled={true}
+              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md w-full mt-2"
               onClick={() => console.log("Proceed to checkout")}
             >
               Proceed to Checkout
-            </button>
+            </button> */}
             <button
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md w-full mt-2"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md w-full mt-4"
               onClick={handleClearCart}
             >
               Clear Cart
