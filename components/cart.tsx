@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { cartAtom } from "@/atoms/productsAtoms";
 import { CartItem } from "@/lib/types";
 
-const CartPage = () => {
+const Cart = () => {
   const [cartItems, setCartItems] = useAtom(cartAtom);
 
   const handleRemoveItem = (itemId: number) => {
@@ -131,4 +131,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default Cart;
