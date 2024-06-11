@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAtomValue, useAtom } from "jotai";
 import {
@@ -14,9 +14,12 @@ import { useProductDetail } from "@/hooks/useProductDetail";
 import Loader from "./loader";
 import { Color, SelectedVariant, Size } from "@/lib/types";
 import ProductModal from "./product-modal";
+import { useProductCart } from "@/hooks/useProductCart";
 
 const ProductDetail: React.FC = () => {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
+  const { addToCart, cart, isAlreadyWithinCart } = useProductCart();
 
   // prettier-ignore
   const { product, fetchProduct, updateVariantsForAProductById } = useProductDetail(params.id);
@@ -70,6 +73,7 @@ const ProductDetail: React.FC = () => {
 
   console.log("product: ", product);
   console.log("hoveredColor: ", hoveredColor);
+  console.log("cart: ", cart);
 
   const handleColorClick = (color: Color) => {
     console.info("existing", selectedVariants);
@@ -130,9 +134,24 @@ const ProductDetail: React.FC = () => {
   };
 
   const handleAddToCart = (quantity: number = 1) => {
-    console.log(`Added ${quantity} items to cart`);
+    console.log(`No. of items to be added to cart: ${quantity}`);
+
     // Add your add-to-cart logic here
+
+    product && addToCart(product, quantity);
+
     setIsModalOpen(false); // Close the modal after adding to cart
+  };
+
+  const handleAddToCartClick = () => {
+    if (product) {
+      if (isAlreadyWithinCart(product)) {
+        // redirect to cart page e.g. router.push("/cart")
+        router.push(`/cart`);
+      } else {
+        setIsModalOpen(true);
+      }
+    }
   };
 
   if (isLoading) {
@@ -253,9 +272,11 @@ const ProductDetail: React.FC = () => {
             {/* Add to cart button starts here (when clicked on this button, modal opens) */}
             <button
               className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleAddToCartClick}
             >
-              Add to Cart
+              {product && isAlreadyWithinCart(product)
+                ? "Go to cart"
+                : "Add to cart"}
             </button>
 
             {/* Add to cart button ends here */}

@@ -22,6 +22,13 @@ const ProductModal = forwardRef<HTMLDivElement, ProductModalProps>(
   ({ product, open, onOpenChange, onAddToCart }, ref) => {
     const [quantity, setQuantity] = useState(1);
 
+    // Reset quantity to 1 when modal is closed
+    useEffect(() => {
+      if (!open) {
+        setQuantity(1);
+      }
+    }, [open]);
+
     useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === "Escape") {
@@ -112,6 +119,8 @@ const ProductModal = forwardRef<HTMLDivElement, ProductModalProps>(
     );
   }
 );
+
+// Used displayName for easier identification in React DevTools & it's especially helpful when using forwardRef
 
 ProductModal.displayName = "ProductModal";
 

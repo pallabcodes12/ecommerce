@@ -21,6 +21,8 @@ const Cart = () => {
     setCartItems([]);
   };
 
+  console.info("cartItems: ", cartItems);
+
   return (
     <div className="container mx-auto mt-4">
       <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
@@ -48,6 +50,7 @@ const Cart = () => {
                   {item.product.description}
                 </p>
                 <p className="text-gray-700 dark:text-gray-400 mt-2">
+                  {/* @ts-ignore */}
                   Color: {item.product.variant?.color}
                 </p>
                 <p className="text-gray-700 dark:text-gray-400">

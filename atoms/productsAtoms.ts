@@ -13,8 +13,6 @@ export const productListAtom = atom<Product[]>([]);
 
 export const productAtom = atom<Product | null>(null);
 
-// export const currentPriceAtom = atom<number>(0);
-
 // derived atom or atom effects
 
 /*
@@ -58,11 +56,20 @@ const storage = createJSONStorage<SelectedVariant>(() => sessionStorage);
 // prettier-ignore
 export const initialSelectedVariantsStateWithDefault: SelectedVariant = { color: COLOR_VARIANT_DEFAULT_IS, size: SIZE_VARIANT_DEFAULT_IS };
 
-export const initialSelectedVariantsState: SelectedVariant = {  } as SelectedVariant;
+export const initialSelectedVariantsState: SelectedVariant =
+  {} as SelectedVariant;
 
 // prettier-ignore
 
 export const selectedVariantsAtom = atomWithStorage<SelectedVariant>("currentlySelectedVariant",initialSelectedVariantsState, storage);
+
+const priceStorage = createJSONStorage<number>(() => sessionStorage);
+
+export const currentPriceAtom = atomWithStorage<number>(
+  "currentPrice",
+  0,
+  priceStorage
+);
 
 const initialCartState: CartItem[] = [];
 
