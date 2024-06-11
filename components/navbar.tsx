@@ -2,19 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaSearch, FaShoppingCart, FaSun, FaMoon } from "react-icons/fa";
+import { FaSearch, FaShoppingCart, FaSun, FaMoon } from "react-icons/fa"; // one of these svg are making an issue
 import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
 import { cartAtom } from "@/atoms/productsAtoms";
 
 const Navbar = () => {
+  const { theme, setTheme } = useTheme(); // next-themes itself exposes a getter theme
+
   const [isFocused, setIsFocused] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [cartItems] = useAtom(cartAtom);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [mounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Calculate total quantity of items in the cart
     const totalQuantity = cartItems.reduce(
       (total, item) => total + item.quantity,
       0
@@ -22,10 +24,15 @@ const Navbar = () => {
     setCartItemCount(totalQuantity);
   }, [cartItems]);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, [mounted]);
+
   const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-    // Logic to toggle dark mode
+    setTheme(theme === "dark" ? "light" : "dark");
   };
+
+  if (!mounted) return null;
 
   return (
     <div className="sticky top-0 z-50">
@@ -64,8 +71,8 @@ const Navbar = () => {
                 )}
               </div>
             </Link>
-            <div style={{ marginRight: "1rem" }}></div> {/* Add spacing */}
-            {isDarkMode ? (
+            <div style={{ marginRight: "1rem" }}></div>
+            {theme === "dark" ? (
               <FaSun
                 className="text-yellow-500 cursor-pointer h-8 w-8"
                 onClick={toggleDarkMode}

@@ -29,7 +29,7 @@ const Cart = () => {
           {cartItems.map((item: CartItem) => (
             <div
               key={`${item.product.id}-${nanoid()}`}
-              className="bg-white p-4 rounded-md shadow-md flex items-center mb-4"
+              className="bg-white dark:bg-gray-800 p-4 rounded-md shadow-md flex items-center mb-4"
             >
               <div className="flex-shrink-0 w-16 h-16">
                 <Image
@@ -41,12 +41,18 @@ const Cart = () => {
                 />
               </div>
               <div className="flex-grow ml-4">
-                <h2 className="text-lg font-semibold">{item.product.title}</h2>
-                <p className="text-gray-500">{item.product.description}</p>
-                <p className="text-gray-700 mt-2">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                  {item.product.title}
+                </h2>
+                <p className="text-gray-500 dark:text-gray-300">
+                  {item.product.description}
+                </p>
+                <p className="text-gray-700 dark:text-gray-400 mt-2">
                   Color: {item.product.variant?.color}
                 </p>
-                <p className="text-gray-700">Price: ${item.product.price}</p>
+                <p className="text-gray-700 dark:text-gray-400">
+                  Price: ${item.product.price}
+                </p>
                 <div className="flex items-center mt-2">
                   <label className="mr-2">Quantity:</label>
                   <select
@@ -81,12 +87,15 @@ const Cart = () => {
           ))}
         </div>
         <div className="col-span-4">
-          <div className="bg-white p-4 rounded-md shadow-md">
-            <h2 className="text-lg font-semibold mb-4">Summary</h2>
-            {/* Calculate subtotal, shipping, and total dynamically */}
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-md shadow-md">
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
+              Summary
+            </h2>
             <div className="flex justify-between mb-2">
-              <span className="text-gray-600">Subtotal:</span>
-              <span className="text-gray-700">
+              <span className="text-gray-600 dark:text-gray-400">
+                Subtotal:
+              </span>
+              <span className="text-gray-700 dark:text-gray-300">
                 $
                 {cartItems
                   .reduce(
@@ -97,8 +106,10 @@ const Cart = () => {
               </span>
             </div>
             <div className="flex justify-between mb-2">
-              <span className="text-gray-600">Shipping:</span>
-              <span className="text-gray-700">$0.00</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                Shipping:
+              </span>
+              <span className="text-gray-700 dark:text-gray-300">$0.00</span>
             </div>
             <hr className="my-2" />
             <div className="flex justify-between mb-2">
@@ -113,13 +124,6 @@ const Cart = () => {
                   .toFixed(2)}
               </span>
             </div>
-            {/* <button
-              disabled={true}
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md w-full mt-2"
-              onClick={() => console.log("Proceed to checkout")}
-            >
-              Proceed to Checkout
-            </button> */}
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-md w-full mt-4"
               onClick={handleClearCart}

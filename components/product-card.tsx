@@ -10,7 +10,7 @@ const ProductCard: React.FC<{ item: Product }> = ({ item }) => {
 
   const router = useRouter();
 
-  console.log("item: ", item);
+  // console.log("item: ", item);
 
   const handleClick = () => {
     router.push(`/products/${item.id}`);

@@ -9,7 +9,7 @@ const ThemeSwitch = () => {
   const [mounted, setMounted] = React.useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
 
-  console.log("current theme: ", theme);
+  // console.log("current theme: ", theme);
 
   React.useEffect(() => setMounted(true), []);
 

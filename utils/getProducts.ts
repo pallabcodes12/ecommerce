@@ -45,7 +45,6 @@ export async function getProduct(
 
     return product;
   } catch (error: unknown) {
-    console.error(`FROM getProducts: Error fetching product.data`);
     throw error;
   }
 }

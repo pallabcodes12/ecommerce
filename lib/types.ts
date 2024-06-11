@@ -7,18 +7,38 @@ export interface iProduct {
   total?: number;
 }
 
-export type Color = "black" | "green" | "blue" | "lightblue" | string;
+export type Colors = "black" | "green" | "blue" | "lightblue" | string;
 
-export type Size = "S" | "M" | "L" | "XL" | string;
-
-export type Variant = {
-  color: Color | Color[];
-  size: Size | Size[];
+export type ColorsType = {
+  id: string;
+  color: Colors;
+  productId?: number | string;
 };
 
-export type SelectedColorVariantType = {
-  productId: string | number | null | undefined;
-  color: string | null;
+// prettier-ignore
+export type Color = ColorsType;
+
+export type Sizes = "S" | "M" | "L" | "XL" | string;
+
+export type SizesType = {
+  id: string;
+  size: Sizes;
+  productId?: number | string;
+};
+
+// prettier-ignore
+export type Size = SizesType;
+
+export type SelectedVariant = {
+  color: ColorsType;
+  size: SizesType;
+  productId?: string | number;
+};
+
+export type Variant = {
+  color: Color[];
+  size: Size[];
+  default: { color: Color; size: Size };
 };
 
 export type CartItem = { product: Product; quantity: number };
