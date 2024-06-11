@@ -13,7 +13,7 @@ import {
 import { useProductDetail } from "@/hooks/useProductDetail";
 import CartModal from "./cart-modal";
 import Loader from "./loader";
-import { Color, SelectedVariant } from "@/lib/types";
+import { Color, SelectedVariant, Size } from "@/lib/types";
 
 const ProductDetail: React.FC = () => {
   const params = useParams<{ id: string }>();
@@ -40,7 +40,17 @@ const ProductDetail: React.FC = () => {
      return "";
    });
 
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<
+    SelectedVariant["size"] | string
+  >(() => {
+    if (typeof window !== "undefined") {
+      const colorVariant: SelectedVariant = JSON.parse(
+        sessionStorage.getItem("currentlySelectedVariant")!
+      );
+      return colorVariant.size ?? "";
+    }
+    return "";
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = React.useState(false);
 
@@ -91,8 +101,33 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  const handleSizeClick = (size: string) => {
-    setSelectedSize(size);
+  const handleSizeClick = (size: Size) => {
+    console.log("clickedSize: ", size);
+
+    // setSelectedSize(prev => {})
+
+    const storedVariants: SelectedVariant =
+      typeof window !== undefined &&
+      (JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? {
+        ...initialSelectedVariantsStateWithDefault,
+        productId: params.id,
+      });
+
+    // prettier-ignore
+    const hasChosenDifferentSizeVariant = size.id !== storedVariants.size.id;
+
+    // prettier-ignore
+    if (product && hasChosenDifferentSizeVariant) {
+      // persistance with the sessionStorage + UI
+      setSelectedVariants({
+        ...storedVariants,
+        size,
+        productId: Number(product.id),
+      });
+
+      // now update this product by its id
+      updateVariantsForAProductById(product.id, false);
+    }
   };
 
   if (isLoading) {
@@ -191,7 +226,7 @@ const ProductDetail: React.FC = () => {
             {/* color variant (with hover): ends here */}
 
             {/* size variant: starts here */}
-            {/* <div className="mb-4">
+            <div className="mb-4">
               <h2 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-2">
                 Sizes
               </h2>
@@ -200,18 +235,18 @@ const ProductDetail: React.FC = () => {
                   <button
                     key={index}
                     className={`px-4 py-2 rounded border ${
-                      selectedSize === size
+                      // @ts-ignore
+                      product.current && product?.current?.size?.id === size.id
                         ? "bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-800"
                         : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100"
                     }`}
                     onClick={() => handleSizeClick(size)}
                   >
-                    {size}
+                    {size.size}
                   </button>
                 ))}
               </div>
-            </div> */}
-
+            </div>
             {/* size variant: ends here */}
 
             {/* Add to cart button starts here */}

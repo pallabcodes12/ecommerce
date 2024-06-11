@@ -114,6 +114,7 @@ export const useProductDetail = (productId: string) => {
             : {}),
           color: storedVariants.color,
           size: storedVariants.size,
+          productId: productId,
         },
       };
 
