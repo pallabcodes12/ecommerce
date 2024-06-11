@@ -68,8 +68,6 @@ const ProductList = () => {
   };
 
   const handleDefaultVariants = (productId: number | string) => {
-    window.alert(`not clicked on color so defaultVariants : ${productId}`);
-
     // prettier-ignore
     const stored = JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? null;
 

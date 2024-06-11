@@ -13,6 +13,8 @@ export const productListAtom = atom<Product[]>([]);
 
 export const productAtom = atom<Product | null>(null);
 
+// export const currentPriceAtom = atom<number>(0);
+
 // derived atom or atom effects
 
 /*

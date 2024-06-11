@@ -11,9 +11,9 @@ import {
   selectedVariantsAtom,
 } from "@/atoms/productsAtoms";
 import { useProductDetail } from "@/hooks/useProductDetail";
-import CartModal from "./cart-modal";
 import Loader from "./loader";
 import { Color, SelectedVariant, Size } from "@/lib/types";
+import ProductModal from "./product-modal";
 
 const ProductDetail: React.FC = () => {
   const params = useParams<{ id: string }>();
@@ -32,25 +32,24 @@ const ProductDetail: React.FC = () => {
   // prettier-ignore
   const [hoveredColor, setHoveredColor] = useState<SelectedVariant["color"] | string>(() => {
      if (typeof window !== "undefined") {
-       const colorVariant: SelectedVariant = JSON.parse(
-         sessionStorage.getItem("currentlySelectedVariant")!
-       );
-       return colorVariant.color ?? "";
+       // prettier-ignore
+       const colorVariant: SelectedVariant = JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!);
+       // prettier-ignore
+       return (colorVariant?.color ?? initialSelectedVariantsStateWithDefault.color);
      }
      return "";
    });
 
-  const [selectedSize, setSelectedSize] = useState<
-    SelectedVariant["size"] | string
-  >(() => {
-    if (typeof window !== "undefined") {
-      const colorVariant: SelectedVariant = JSON.parse(
-        sessionStorage.getItem("currentlySelectedVariant")!
-      );
-      return colorVariant.size ?? "";
-    }
-    return "";
-  });
+  // const [selectedSize, setSelectedSize] = useState<
+  //   SelectedVariant["size"] | string
+  // >(() => {
+  //   if (typeof window !== "undefined") {
+  //     const colorVariant: SelectedVariant = JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!);
+  //     return colorVariant?.size ?? initialSelectedVariantsStateWithDefault.size;
+  //   }
+  //   return "";
+  // });
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = React.useState(false);
 
@@ -70,7 +69,7 @@ const ProductDetail: React.FC = () => {
   }, []);
 
   console.log("product: ", product);
-  console.log("hoverColor: ", hoveredColor);
+  console.log("hoveredColor: ", hoveredColor);
 
   const handleColorClick = (color: Color) => {
     console.info("existing", selectedVariants);
@@ -130,13 +129,15 @@ const ProductDetail: React.FC = () => {
     }
   };
 
+  const handleAddToCart = (quantity: number = 1) => {
+    console.log(`Added ${quantity} items to cart`);
+    // Add your add-to-cart logic here
+    setIsModalOpen(false); // Close the modal after adding to cart
+  };
+
   if (isLoading) {
     return <Loader />;
   }
-
-  const selectedColorForProduct = selectedVariants.color || null;
-
-  // const sizeIndex = selectedSize ? productSizeVariants.findIndex((size) => size === selectedSize) : -1;
 
   const defaultPrice = product?.prices
     ? product.prices.length > 1
@@ -231,9 +232,9 @@ const ProductDetail: React.FC = () => {
                 Sizes
               </h2>
               <div className="flex space-x-2">
-                {productSizeVariants.map((size, index) => (
+                {productSizeVariants.map((size) => (
                   <button
-                    key={index}
+                    key={size.id}
                     className={`px-4 py-2 rounded border ${
                       // @ts-ignore
                       product.current && product?.current?.size?.id === size.id
@@ -249,7 +250,7 @@ const ProductDetail: React.FC = () => {
             </div>
             {/* size variant: ends here */}
 
-            {/* Add to cart button starts here */}
+            {/* Add to cart button starts here (when clicked on this button, modal opens) */}
             <button
               className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
               onClick={() => setIsModalOpen(true)}
@@ -260,12 +261,14 @@ const ProductDetail: React.FC = () => {
             {/* Add to cart button ends here */}
 
             {/* modal: starts here */}
-            {isModalOpen && (
-              <CartModal
-                product={product}
-                onClose={() => setIsModalOpen(false)}
-              />
-            )}
+
+            <ProductModal
+              product={product}
+              open={isModalOpen}
+              onOpenChange={setIsModalOpen}
+              onAddToCart={handleAddToCart}
+            />
+
             {/* modal : ends here */}
           </div>
         </div>

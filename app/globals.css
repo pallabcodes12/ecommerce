@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Apply overflow: hidden only to pages with the modal open */
+.modal-open {
+  overflow: hidden;
+}
+
+/* Add this style only when the modal is open */
+.DialogOverlay-open {
+  overflow: hidden;
+}
+
+/* Ensure the navbar stays fixed at the top and takes full width */
+nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1000; /* Ensure the navbar stays on top */
+}
+
+/* Adjust the modal position to start below the navbar */
+.DialogContent {
+  position: fixed;
+  top: 5rem; /* Adjust this value to match the height of your navbar */
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure the modal content is vertically centered */
+.DialogContent > div {
+  /* prettier-ignore */
+  max-height: calc(100% - 5rem); /* Subtract the navbar height from the modal height */
+  overflow-y: auto;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
