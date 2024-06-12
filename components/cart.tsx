@@ -108,7 +108,9 @@ const Cart = () => {
                 $
                 {cartItems
                   .reduce(
-                    (acc, item) => acc + item.product.price * item.quantity,
+                    // @ts-ignore
+                    // prettier-ignore
+                    (acc, item) => acc + item.product.currentPrice * item.quantity,
                     0
                   )
                   .toFixed(2)}
@@ -127,7 +129,9 @@ const Cart = () => {
                 $
                 {cartItems
                   .reduce(
-                    (acc, item) => acc + item.product.price * item.quantity,
+                    // @ts-ignore
+                    // prettier-ignore
+                    (acc, item) => acc + item.product.currentPrice * item.quantity,
                     0
                   )
                   .toFixed(2)}
