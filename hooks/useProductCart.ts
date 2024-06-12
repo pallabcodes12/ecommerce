@@ -36,9 +36,64 @@ export const useProductCart = () => {
     }
   };
 
-  const updateCartItem = (productId: number, quantity: number) => {
-    // prettier-ignore
-    setCart((prevCart) => prevCart.map((item) => item.product.id === productId ? { ...item, quantity } : item));
+  const updateCartItem = (quantity: number, currentProduct: CartItem) => {
+    // console.log("newQT from the useProductCart: ", quantity);
+
+    // console.info(JSON.stringify(currentProduct, null, 2));
+
+    const existingItemIndex = cart.findIndex((item: CartItem) => {
+      return (
+        item.product.id === currentProduct.product.id &&
+        // @ts-ignore
+        // prettier-ignore
+        item?.product?.current?.color?.id === currentProduct.product?.current?.color?.id &&
+        // @ts-ignore
+        // prettier-ignore
+        item?.product?.current?.size?.id === currentProduct?.product?.current?.size?.id
+      );
+    });
+
+    // window && window.alert(existingItemIndex);
+
+    if (existingItemIndex !== -1) {
+      // Product with same ID and variant exists in the cart, therefore update its quantity
+      setCart((prevCart) => {
+        const updatedCart = [...prevCart];
+        updatedCart[existingItemIndex].quantity = quantity;
+        // console.info("updatedCart: ", updatedCart);
+        return updatedCart;
+      });
+    }
+  };
+
+  const deleteCartItem = (currentProduct: CartItem) => {
+    const existingItemIndex = cart.findIndex((item: CartItem) => {
+      return (
+        item.product.id === currentProduct.product.id &&
+        // @ts-ignore
+        // prettier-ignore
+        item?.product?.current?.color?.id === currentProduct.product?.current?.color?.id &&
+        // @ts-ignore
+        // prettier-ignore
+        item?.product?.current?.size?.id === currentProduct?.product?.current?.size?.id
+      );
+    });
+
+    if (existingItemIndex !== -1) {
+      // Product with same ID and variant exists in the cart, therefore update its quantity
+      setCart((prevCart) => {
+        let updatedCart: CartItem[] = [...prevCart];
+
+        console.info("before:", existingItemIndex, updatedCart);
+
+        // prettier-ignore
+        updatedCart = updatedCart.filter((item: CartItem, index: number) => index !== existingItemIndex);
+
+        console.info("after:", existingItemIndex, updatedCart);
+
+        return updatedCart;
+      });
+    }
   };
 
   const isAlreadyWithinCart = (productInfo: Product) => {
@@ -56,5 +111,12 @@ export const useProductCart = () => {
     return doesExistWithinCart !== -1;
   };
 
-  return { product, cart, addToCart, updateCartItem, isAlreadyWithinCart };
+  return {
+    product,
+    cart,
+    addToCart,
+    updateCartItem,
+    deleteCartItem,
+    isAlreadyWithinCart,
+  };
 };

@@ -6,15 +6,14 @@ import { useAtom } from "jotai";
 import { cartAtom } from "@/atoms/productsAtoms";
 import { CartItem } from "@/lib/types";
 import { nanoid } from "nanoid";
+import { useProductCart } from "@/hooks/useProductCart";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useAtom(cartAtom);
+  const { updateCartItem, deleteCartItem } = useProductCart();
 
-  const handleRemoveItem = (itemId: number) => {
-    const updatedCartItems = cartItems.filter(
-      (item) => item.product.id !== itemId
-    );
-    setCartItems(updatedCartItems);
+  const handleRemoveItem = (item: CartItem) => {
+    deleteCartItem(item);
   };
 
   const handleClearCart = () => {
@@ -23,10 +22,13 @@ const Cart = () => {
 
   console.info("cartItems: ", cartItems);
 
+  // return <pre>{JSON.stringify(cartItems, null, 2)}</pre>;
+
   return (
     <div className="container mx-auto mt-4">
       <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
       <div className="grid grid-cols-12 gap-4">
+        {/* cartItems: start */}
         <div className="col-span-8">
           {cartItems.map((item: CartItem) => (
             <div
@@ -44,14 +46,18 @@ const Cart = () => {
               </div>
               <div className="flex-grow ml-4">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                  {item.product.title}
+                  {item.product.title} : id: {item.product.id}
                 </h2>
                 <p className="text-gray-500 dark:text-gray-300">
                   {item.product.description}
                 </p>
                 <p className="text-gray-700 dark:text-gray-400 mt-2">
                   {/* @ts-ignore */}
-                  Color: {item.product.variant?.color}
+                  Color: {item.product.current?.color.color}
+                </p>
+                <p className="text-gray-700 dark:text-gray-400">
+                  {/* @ts-ignore */}
+                  Size: {item.product.current?.size.size}
                 </p>
                 <p className="text-gray-700 dark:text-gray-400">
                   Price: ${item.product.price}
@@ -62,25 +68,22 @@ const Cart = () => {
                     className="border rounded-md px-2 py-1"
                     value={item.quantity}
                     onChange={(e) => {
-                      const newQuantity = parseInt(e.target.value);
-                      setCartItems((prevCartItems) =>
-                        prevCartItems.map((cartItem) =>
-                          cartItem.product.id === item.product.id
-                            ? { ...cartItem, quantity: newQuantity }
-                            : cartItem
-                        )
+                      console.log(
+                        "newQT from the cart component: ",
+                        parseInt(e.target.value)
                       );
+                      updateCartItem(parseInt(e.target.value), item);
                     }}
                   >
                     {Array.from({ length: 10 }).map((_, i: number) => (
-                      <option key={i} value={i + 1}>
+                      <option key={`${i}-${nanoid()}`} value={i + 1}>
                         {i + 1}
                       </option>
                     ))}
                   </select>
                   <button
                     className="ml-auto text-red-500"
-                    onClick={() => handleRemoveItem(item.product.id)}
+                    onClick={() => handleRemoveItem(item)}
                   >
                     Remove
                   </button>
@@ -89,6 +92,11 @@ const Cart = () => {
             </div>
           ))}
         </div>
+
+        {/* cartItems: ends */}
+
+        {/* summary: starts */}
+
         <div className="col-span-4">
           <div className="bg-white dark:bg-gray-800 p-4 rounded-md shadow-md">
             <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
@@ -135,6 +143,8 @@ const Cart = () => {
             </button>
           </div>
         </div>
+
+        {/* summary: ends */}
       </div>
     </div>
   );
