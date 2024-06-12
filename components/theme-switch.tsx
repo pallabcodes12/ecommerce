@@ -7,9 +7,7 @@ import Image from "next/image";
 
 const ThemeSwitch = () => {
   const [mounted, setMounted] = React.useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
-
-  // console.log("current theme: ", theme);
+  const { theme, setTheme, resolvedTheme } = useTheme(); // theme or resolvedTheme does the same thing
 
   React.useEffect(() => setMounted(true), []);
 

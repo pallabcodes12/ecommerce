@@ -37,10 +37,6 @@ export const useProductCart = () => {
   };
 
   const updateCartItem = (quantity: number, currentProduct: CartItem) => {
-    // console.log("newQT from the useProductCart: ", quantity);
-
-    // console.info(JSON.stringify(currentProduct, null, 2));
-
     const existingItemIndex = cart.findIndex((item: CartItem) => {
       return (
         item.product.id === currentProduct.product.id &&
@@ -58,7 +54,6 @@ export const useProductCart = () => {
       setCart((prevCart) => {
         const updatedCart = [...prevCart];
         updatedCart[existingItemIndex].quantity = quantity;
-        // console.info("updatedCart: ", updatedCart);
         return updatedCart;
       });
     }
@@ -82,12 +77,8 @@ export const useProductCart = () => {
       setCart((prevCart) => {
         let updatedCart: CartItem[] = [...prevCart];
 
-        console.info("before:", existingItemIndex, updatedCart);
-
         // prettier-ignore
         updatedCart = updatedCart.filter((item: CartItem, index: number) => index !== existingItemIndex);
-
-        console.info("after:", existingItemIndex, updatedCart);
 
         return updatedCart;
       });

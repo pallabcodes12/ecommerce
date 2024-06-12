@@ -24,8 +24,6 @@ const Cart = () => {
     setCartItems([]);
   };
 
-  // console.info("cartItems: ", cartItems);
-
   // return <pre>{JSON.stringify(cartItems, null, 2)}</pre>;
 
   return (
@@ -72,10 +70,6 @@ const Cart = () => {
                     className="border rounded-md px-2 py-1"
                     value={item.quantity}
                     onChange={(e) => {
-                      console.log(
-                        "newQT from the cart component: ",
-                        parseInt(e.target.value)
-                      );
                       updateCartItem(parseInt(e.target.value), item);
                     }}
                   >

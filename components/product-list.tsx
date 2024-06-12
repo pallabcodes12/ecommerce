@@ -29,10 +29,6 @@ const ProductList = () => {
   const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
-    console.info(
-      "The component must loading or reloading so reset the sessionStorage"
-    );
-
     sessionStorage.clear();
 
     const fetchData = async () => {
@@ -48,10 +44,6 @@ const ProductList = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  React.useEffect(() => {
-    console.info("from useEffect: watching selectedVariants", selectedVariants);
-  }, [selectedVariants]);
 
   const handleColorVariant = (
     event: React.MouseEvent<HTMLElement>,
@@ -82,8 +74,6 @@ const ProductList = () => {
     // prettier-ignore
     const stored = JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? null;
 
-    console.log(`here`, selectedVariants, stored);
-
     if (!stored || Object.keys(selectedVariants).length === 0) {
       // haven't clicked on any color for this specific product ( so then store default into )
 
@@ -100,9 +90,6 @@ const ProductList = () => {
     // Ensure updateVariantsByProductId is called after selectedVariants is updated
     setTimeout(() => updateVariantsByProductId(productId, true), 0);
   };
-
-  // prettier-ignore
-  console.log("re-rendering: " , "products:", products, "selectedProducts: ", selectedVariants, "currentPrice: ", currentPrice);
 
   if (isLoading) {
     return <Loader />; // Show loader while fetching data
