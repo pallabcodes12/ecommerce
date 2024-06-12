@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* Hero Section */}
       <div className="relative w-full h-screen overflow-hidden">
         <Image
@@ -33,7 +33,7 @@ const HomePage = () => {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {/* Product Cards */}
-          <div className="bg-white p-4 rounded-lg shadow-md">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
             <Image
               src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2"
               alt="Product 1"
@@ -42,16 +42,13 @@ const HomePage = () => {
               height={700}
             />
             <h3 className="text-lg font-semibold mb-2">Stylish Jacket</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Stay warm and stylish with this trendy jacket. Perfect for the
               winter season.
             </p>
-            {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-              View Details
-            </button> */}
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-md">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
             <Image
               src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f"
               alt="Product 2"
@@ -60,16 +57,13 @@ const HomePage = () => {
               height={700}
             />
             <h3 className="text-lg font-semibold mb-2">Elegant Dress</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Turn heads with this elegant dress, perfect for any special
               occasion.
             </p>
-            {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-              View Details
-            </button> */}
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-md">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
             <Image
               src="https://images.unsplash.com/photo-1535008652995-e95986556e32"
               alt="Product 3"
@@ -78,15 +72,12 @@ const HomePage = () => {
               height={700}
             />
             <h3 className="text-lg font-semibold mb-2">Casual Shirt</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Keep it casual with this comfortable and stylish shirt.
             </p>
-            {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-              View Details
-            </button> */}
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-md">
+          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
             <Image
               src="https://images.unsplash.com/photo-1559526324-593bc073d938"
               alt="Product 4"
@@ -95,23 +86,20 @@ const HomePage = () => {
               height={700}
             />
             <h3 className="text-lg font-semibold mb-2">Trendy Sunglasses</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Protect your eyes and look stylish with these trendy sunglasses.
             </p>
-            {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-              View Details
-            </button> */}
           </div>
         </div>
       </section>
 
       {/* New Trends Section */}
-      <section className="bg-gray-100 py-12">
+      <section className="bg-gray-100 dark:bg-gray-800 py-12">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-8">New Trends</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {/* Trend Cards */}
-            <div className="bg-white p-4 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
               <Image
                 src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f"
                 alt="Trend 1"
@@ -120,15 +108,12 @@ const HomePage = () => {
                 height={700}
               />
               <h3 className="text-lg font-semibold mb-2">Streetwear</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Stay ahead with the latest streetwear fashion trends.
               </p>
-              {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-                Learn More
-              </button> */}
             </div>
 
-            <div className="bg-white p-4 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
               <Image
                 src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2"
                 alt="Trend 2"
@@ -137,16 +122,13 @@ const HomePage = () => {
                 height={700}
               />
               <h3 className="text-lg font-semibold mb-2">Vintage</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Discover the charm of vintage fashion with our exclusive
                 collection.
               </p>
-              {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-                Learn More
-              </button> */}
             </div>
 
-            <div className="bg-white p-4 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
               <Image
                 src="https://images.unsplash.com/photo-1535008652995-e95986556e32"
                 alt="Trend 3"
@@ -155,15 +137,12 @@ const HomePage = () => {
                 height={700}
               />
               <h3 className="text-lg font-semibold mb-2">Minimalist</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Embrace simplicity with our minimalist fashion collection.
               </p>
-              {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-                Learn More
-              </button> */}
             </div>
 
-            <div className="bg-white p-4 rounded-lg shadow-md">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
               <Image
                 src="https://images.unsplash.com/photo-1559526324-593bc073d938"
                 alt="Trend 4"
@@ -172,12 +151,9 @@ const HomePage = () => {
                 height={700}
               />
               <h3 className="text-lg font-semibold mb-2">Athleisure</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Combine comfort and style with our athleisure wear.
               </p>
-              {/* <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4">
-                Learn More
-              </button> */}
             </div>
           </div>
         </div>

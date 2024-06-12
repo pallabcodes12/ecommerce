@@ -14,12 +14,40 @@ const ReviewSchema = z.object({
   reviewerEmail: z.string().email(),
 });
 
-const VariantSchema = z.object({
-  color: z.array(z.string()).optional(),
-  size: z.array(z.string()).optional(),
-  capacity: z.array(z.number()).optional(),
-  weight: z.array(z.number()).optional(),
+// VariantSchema with support for various shapes
+const VariantObjectSchema = z.object({
+  color: z
+    .union([z.string(), z.object({ id: z.string(), color: z.string() })])
+    .nullable(),
+  size: z
+    .union([z.string(), z.object({ id: z.string(), size: z.string() })])
+    .nullable(),
+  productId: z.number().optional(),
 });
+
+const VariantArraySchema = z.array(
+  z.object({
+    color: z.object({ id: z.string(), color: z.string() }),
+    size: z.object({ id: z.string(), size: z.string() }),
+    productId: z.number(),
+  })
+);
+
+const CurrentSchema = z.union([
+  z.null(),
+  z.string(),
+  z.object({
+    color: z
+      .union([z.string(), z.object({ id: z.string(), color: z.string() })])
+      .nullable(),
+    size: z
+      .union([z.string(), z.object({ id: z.string(), size: z.string() })])
+      .nullable(),
+    productId: z.union([z.number(), z.string()]),
+  }),
+]);
+
+const VariantSchema = z.union([VariantObjectSchema, VariantArraySchema]);
 
 const MetaSchema = z.object({
   createdAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/),
@@ -49,12 +77,15 @@ const ProductSchema = z.object({
   returnPolicy: z.string(),
   minimumOrderQuantity: z.number(),
   meta: MetaSchema,
-  variant: VariantSchema.optional(),
+  // variantInfo: z.union([VariantSchema, z.array(VariantSchema)]).optional(),
+  variantInfo: VariantSchema.optional(),
   images: z.array(z.string().url()),
   thumbnail: z.string().url(),
   prices: z.array(z.number()).optional(),
+  current: CurrentSchema,
+  currentPrice: z.number().optional()
 });
 
-type Product = z.infer<typeof ProductSchema>;
+export type Product = z.infer<typeof ProductSchema>;
 
-export { type Product, ProductSchema };
+export { ProductSchema };
