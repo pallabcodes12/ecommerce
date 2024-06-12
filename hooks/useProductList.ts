@@ -53,7 +53,7 @@ export const useProductList = () => {
 
       setProductList(validatedProducts);
     } catch (error: unknown) {
-      console.error("Failed to fetch products:", (error as any).message);
+      throw error;
     }
   };
 
@@ -80,7 +80,6 @@ export const useProductList = () => {
 
       // If isOnlyColor is true, update only the color variant
       if (isOnlyColor) {
-        // console.info("storedVariants: ", storedVariants);
 
         const updatedProduct = {
           ...productToUpdate,
@@ -102,9 +101,6 @@ export const useProductList = () => {
       }
 
 
-
-      console.info("code should come here if [isOnlyColor = false]");
-
       // If isOnlyColor is false, update both color and size variants
       const updatedProduct = {
         ...productToUpdate,
@@ -120,7 +116,6 @@ export const useProductList = () => {
 
       setProductList(updatedProductList);
     } catch (error: unknown) {
-      console.error((error as any).message);
       throw error;
     }
   };

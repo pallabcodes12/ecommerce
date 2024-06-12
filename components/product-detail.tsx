@@ -73,10 +73,6 @@ const ProductDetail: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("product: ", product);
-  console.log("hoveredColor: ", hoveredColor);
-  console.log("cart: ", cart);
-
   const handleColorClick = (color: Color, i: number) => {
     const storedVariants: SelectedVariant =
       typeof window !== undefined &&
@@ -109,10 +105,6 @@ const ProductDetail: React.FC = () => {
   };
 
   const handleSizeClick = (size: Size, i: number) => {
-    console.log("clickedSize: ", size);
-
-    // setSelectedSize(prev => {})
-
     const storedVariants: SelectedVariant =
       typeof window !== undefined &&
       (JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? {
@@ -144,12 +136,7 @@ const ProductDetail: React.FC = () => {
   };
 
   const handleAddToCart = (quantity: number = 1) => {
-    console.log(`No. of items to be added to cart: ${quantity}`);
-
-    // Add your add-to-cart logic here
-
     product && addToCart(product, quantity);
-
     setIsModalOpen(false); // Close the modal after adding to cart
   };
 

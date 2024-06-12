@@ -22,7 +22,6 @@ export const useProductDetail = (productId: string) => {
         const data: Product = await res.json();
         setProduct(data);
       } catch (error) {
-        console.error("Failed to fetch product:", error);
         throw error;
       }
     };
@@ -66,7 +65,6 @@ export const useProductDetail = (productId: string) => {
 
       setProduct(productWithVariants);
     } catch (error) {
-      console.error("Failed to fetch product:", error);
       throw error;
     }
   };
@@ -81,10 +79,7 @@ export const useProductDetail = (productId: string) => {
     // prettier-ignore
     const storedCurrentPrice = JSON.parse(sessionStorage.getItem("currentPrice")!) ?? product?.price;
 
-    if (!product) {
-      console.error("Product is null.");
-      return;
-    }
+    if (!product) return;
 
     try {
       if (isOnlyColor) {
@@ -108,7 +103,7 @@ export const useProductDetail = (productId: string) => {
         return;
       }
 
-      console.info("code should come here if [isOnlyColor = false]");
+      
 
       const updatedProduct = {
         ...product,
@@ -127,7 +122,6 @@ export const useProductDetail = (productId: string) => {
 
       setProduct(updatedProduct as Product);
     } catch (error: unknown) {
-      console.error((error as any).message);
       throw error;
     }
   };
