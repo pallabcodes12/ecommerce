@@ -7,13 +7,14 @@ import { motion } from "framer-motion";
 import { useProductList } from "@/hooks/useProductList";
 import { useAtom, useAtomValue } from "jotai";
 import {
-  initialSelectedVariantsStateWithDefault,
+  currentPriceAtom,
   productVariantsColorAtom,
   selectedVariantsAtom,
 } from "@/atoms/productsAtoms";
 import Loader from "./loader"; // Import the Loader component
 import { Color } from "@/lib/types";
 import { COLOR_VARIANT, SIZE_VARIANT } from "@/constants";
+import { Product } from "@/lib/schemas/productSchema";
 
 const ProductList = () => {
   const {
@@ -22,6 +23,7 @@ const ProductList = () => {
     updateVariantsByProductId,
   } = useProductList();
   const [selectedVariants, setSelectedVariants] = useAtom(selectedVariantsAtom);
+  const [currentPrice, setCurrentPrice] = useAtom(currentPriceAtom);
   const productColorVariants = useAtomValue(productVariantsColorAtom);
   const [isLoading, setIsLoading] = React.useState(true); // Add isLoading state
   const [isError, setIsError] = React.useState(false);
@@ -53,18 +55,27 @@ const ProductList = () => {
 
   const handleColorVariant = (
     event: React.MouseEvent<HTMLElement>,
-    productId: string | number,
-    color: Color
+    productInfo: Product,
+    color: Color,
+    i: number
   ) => {
     event.stopPropagation();
 
-    const newColorVariant = { color, size: SIZE_VARIANT[0], productId };
+    const newColorVariant = {
+      color,
+      size: SIZE_VARIANT[0],
+      productId: productInfo.id,
+    };
+
+    // store price in this atom and save it in sessionStorage
+
+    setCurrentPrice(productInfo.price * (i + 1));
 
     // store in this atom and save it in sessionStorage
     setSelectedVariants(newColorVariant);
 
     // Ensure updateVariantsByProductId is called after selectedVariants is updated
-    setTimeout(() => updateVariantsByProductId(productId, true), 0);
+    setTimeout(() => updateVariantsByProductId(productInfo.id, true), 0);
   };
 
   const handleDefaultVariants = (productId: number | string) => {
@@ -91,7 +102,7 @@ const ProductList = () => {
   };
 
   // prettier-ignore
-  console.log("re-rendering: " , "products:", products, "selectedProducts: ", selectedVariants);
+  console.log("re-rendering: " , "products:", products, "selectedProducts: ", selectedVariants, "currentPrice: ", currentPrice);
 
   if (isLoading) {
     return <Loader />; // Show loader while fetching data
@@ -129,7 +140,7 @@ const ProductList = () => {
                   />
                   <div className="mt-4">
                     <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-                      {product.title}
+                      {product.title} - {product.currentPrice || product.price}
                     </h2>
                     <p className="text-gray-500 dark:text-gray-300 mb-3">
                       {product.category ?? "Black Premium"}
@@ -138,27 +149,29 @@ const ProductList = () => {
                       <span className="text-xl font-bold text-gray-900 dark:text-white">
                         ${product.price}
                       </span>
-                      <span className="text-sm font-medium text-red-500">
+                      <span className="text-sm  font-medium text-red-500">
                         {product.discountPercentage.toFixed(0) ?? 20}% off
                       </span>
                     </div>
                     {/* color variant starts here */}
                     <div className="mt-4 flex space-x-2">
-                      {productColorVariants.map((colorInfo: Color) => (
-                        <div
-                          onClick={(e) =>
-                            handleColorVariant(e, product.id, colorInfo)
-                          }
-                          key={colorInfo.id}
-                          className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer ${
-                            // @ts-expect-error type unknown
-                            colorInfo.id === product.current!.color.id
-                              ? "ring-2 ring-offset-2 ring-blue-500"
-                              : ""
-                          }`}
-                          style={{ backgroundColor: colorInfo.color }}
-                        />
-                      ))}
+                      {productColorVariants.map(
+                        (colorInfo: Color, index: number) => (
+                          <div
+                            onClick={(e) =>
+                              handleColorVariant(e, product, colorInfo, index)
+                            }
+                            key={colorInfo.id}
+                            className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer ${
+                              // @ts-expect-error type unknown
+                              colorInfo.id === product.current!.color.id
+                                ? "ring-2 ring-offset-2 ring-blue-500"
+                                : ""
+                            }`}
+                            style={{ backgroundColor: colorInfo.color }}
+                          />
+                        )
+                      )}
                     </div>
                     {/* color variant ends here */}
                   </div>

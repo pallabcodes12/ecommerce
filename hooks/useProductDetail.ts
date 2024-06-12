@@ -14,7 +14,6 @@ export const useProductDetail = (productId: string) => {
   const [product, setProduct] = useAtom(productAtom);
   const productVariantForColors = useAtomValue(productVariantsColorAtom);
 
-  
   // this useEffect will run initially & then whenever productId changes through setter or any exposed hooks
   React.useEffect(() => {
     const fetchProduct = async () => {
@@ -31,7 +30,7 @@ export const useProductDetail = (productId: string) => {
     fetchProduct();
 
     return () => {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   const fetchProduct = async () => {
@@ -46,6 +45,9 @@ export const useProductDetail = (productId: string) => {
       };
 
       // prettier-ignore
+      const storedCurrentPrice = JSON.parse(sessionStorage.getItem("currentPrice")!) ?? data.price;
+
+      // prettier-ignore
       const storedVariants = JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? defaultVariants;
 
       // Additional properties to set
@@ -53,6 +55,7 @@ export const useProductDetail = (productId: string) => {
         ...data,
         current: { ...storedVariants, productId: data.id },
         variantInfo: [],
+        currentPrice: storedCurrentPrice,
       };
 
       // prettier-ignore
@@ -70,11 +73,13 @@ export const useProductDetail = (productId: string) => {
 
   // prettier-ignore
   const updateVariantsForAProductById = (productId: string | number, isOnlyColor: boolean = false) => {
-
     
     const defaultVariants: SelectedVariant = { ...initialSelectedVariantsStateWithDefault, productId };
 
     const storedVariants: SelectedVariant = JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? defaultVariants;
+
+    // prettier-ignore
+    const storedCurrentPrice = JSON.parse(sessionStorage.getItem("currentPrice")!) ?? product?.price;
 
     if (!product) {
       console.error("Product is null.");
@@ -86,6 +91,7 @@ export const useProductDetail = (productId: string) => {
         // explicity type checking need since current uses union ( multiple types )
         const updatedProduct = {
           ...product,
+          currentPrice: storedCurrentPrice,
           current: {
             // prettier-ignore
             ...(product.current && typeof product.current === "object" && !Array.isArray(product.current)
@@ -106,6 +112,7 @@ export const useProductDetail = (productId: string) => {
 
       const updatedProduct = {
         ...product,
+        currentPrice: storedCurrentPrice,
         current: {
           ...(product.current &&
           typeof product.current === "object" &&

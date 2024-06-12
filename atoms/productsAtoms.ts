@@ -65,11 +65,8 @@ export const selectedVariantsAtom = atomWithStorage<SelectedVariant>("currentlyS
 
 const priceStorage = createJSONStorage<number>(() => sessionStorage);
 
-export const currentPriceAtom = atomWithStorage<number>(
-  "currentPrice",
-  0,
-  priceStorage
-);
+// prettier-ignore
+export const currentPriceAtom = atomWithStorage<number>("currentPrice", 0, priceStorage);
 
 const initialCartState: CartItem[] = [];
 

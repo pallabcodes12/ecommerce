@@ -53,8 +53,6 @@ export const useProductCart = () => {
       );
     });
 
-    // window && window.alert(existingItemIndex);
-
     if (existingItemIndex !== -1) {
       // Product with same ID and variant exists in the cart, therefore update its quantity
       setCart((prevCart) => {

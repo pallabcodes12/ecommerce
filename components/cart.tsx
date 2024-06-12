@@ -12,6 +12,10 @@ const Cart = () => {
   const [cartItems, setCartItems] = useAtom(cartAtom);
   const { updateCartItem, deleteCartItem } = useProductCart();
 
+  React.useEffect(() => {
+    sessionStorage.clear();
+  }, []);
+
   const handleRemoveItem = (item: CartItem) => {
     deleteCartItem(item);
   };
@@ -20,7 +24,7 @@ const Cart = () => {
     setCartItems([]);
   };
 
-  console.info("cartItems: ", cartItems);
+  // console.info("cartItems: ", cartItems);
 
   // return <pre>{JSON.stringify(cartItems, null, 2)}</pre>;
 
@@ -46,7 +50,7 @@ const Cart = () => {
               </div>
               <div className="flex-grow ml-4">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                  {item.product.title} : id: {item.product.id}
+                  {item.product.title}
                 </h2>
                 <p className="text-gray-500 dark:text-gray-300">
                   {item.product.description}
@@ -60,7 +64,7 @@ const Cart = () => {
                   Size: {item.product.current?.size.size}
                 </p>
                 <p className="text-gray-700 dark:text-gray-400">
-                  Price: ${item.product.price}
+                  Price: ${item.product.currentPrice || item.product.price}
                 </p>
                 <div className="flex items-center mt-2">
                   <label className="mr-2">Quantity:</label>

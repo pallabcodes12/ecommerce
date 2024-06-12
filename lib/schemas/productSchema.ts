@@ -83,6 +83,7 @@ const ProductSchema = z.object({
   thumbnail: z.string().url(),
   prices: z.array(z.number()).optional(),
   current: CurrentSchema,
+  currentPrice: z.number().optional()
 });
 
 export type Product = z.infer<typeof ProductSchema>;

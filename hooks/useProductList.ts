@@ -36,6 +36,7 @@ export const useProductList = () => {
             ...initialSelectedVariantsStateWithDefault,
             productId: product.id,
           },
+          currentPrice: product.price,
 
           // variantInfo: variantInfoArray.map((info) => ({
           //   ...info,

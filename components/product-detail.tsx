@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAtomValue, useAtom } from "jotai";
 import {
+  currentPriceAtom,
   initialSelectedVariantsStateWithDefault,
   productVariantsColorAtom,
   productVariantsSizeAtom,
@@ -20,6 +21,7 @@ const ProductDetail: React.FC = () => {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const { addToCart, cart, isAlreadyWithinCart } = useProductCart();
+  const [currentPrice, setCurrentPrice] = useAtom(currentPriceAtom);
 
   // prettier-ignore
   const { product, fetchProduct, updateVariantsForAProductById } = useProductDetail(params.id);
@@ -75,9 +77,7 @@ const ProductDetail: React.FC = () => {
   console.log("hoveredColor: ", hoveredColor);
   console.log("cart: ", cart);
 
-  const handleColorClick = (color: Color) => {
-    console.info("existing", selectedVariants);
-
+  const handleColorClick = (color: Color, i: number) => {
     const storedVariants: SelectedVariant =
       typeof window !== undefined &&
       (JSON.parse(sessionStorage.getItem("currentlySelectedVariant")!) ?? {
@@ -85,7 +85,11 @@ const ProductDetail: React.FC = () => {
         productId: params.id,
       });
 
-    console.info("storedColorVariant: ", storedVariants);
+    // store the clicked color's price in sessionStorage
+
+    if (Array.isArray(product?.prices)) {
+      setCurrentPrice(product.prices?.[i]);
+    }
 
     // prettier-ignore
     const hasChosenDifferentColorVariant = color.id !== storedVariants.color.id;
@@ -104,7 +108,7 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-  const handleSizeClick = (size: Size) => {
+  const handleSizeClick = (size: Size, i: number) => {
     console.log("clickedSize: ", size);
 
     // setSelectedSize(prev => {})
@@ -115,6 +119,12 @@ const ProductDetail: React.FC = () => {
         ...initialSelectedVariantsStateWithDefault,
         productId: params.id,
       });
+
+    // store the clicked color's price in sessionStorage
+
+    if (Array.isArray(product?.prices)) {
+      setCurrentPrice(product.prices?.[i]);
+    }
 
     // prettier-ignore
     const hasChosenDifferentSizeVariant = size.id !== storedVariants.size.id;
@@ -158,14 +168,6 @@ const ProductDetail: React.FC = () => {
     return <Loader />;
   }
 
-  const defaultPrice = product?.prices
-    ? product.prices.length > 1
-      ? product.prices[0]
-      : product.prices[0] || null
-    : product?.price || null;
-
-  // const price = sizeIndex !== -1 && product?.prices ? product.prices[sizeIndex] : defaultPrice;
-
   // return <pre>{JSON.stringify(product, null, 2)}</pre>;
   return (
     <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
@@ -205,7 +207,7 @@ const ProductDetail: React.FC = () => {
               {product?.description}
             </p>
             <p className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
-              ${product?.price}
+              ${product?.currentPrice || product?.price}
             </p>
 
             {/* color variant (with hover): starts here */}
@@ -214,7 +216,7 @@ const ProductDetail: React.FC = () => {
                 Colors
               </h2>
               <div className="flex space-x-2">
-                {productColorVariants.map((colorInfo: Color) => (
+                {productColorVariants.map((colorInfo: Color, index: number) => (
                   <div
                     key={colorInfo.id}
                     className={`w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600 cursor-pointer ${
@@ -225,7 +227,6 @@ const ProductDetail: React.FC = () => {
                     }`}
                     style={{ backgroundColor: colorInfo.color }}
                     onMouseEnter={() => {
-                      // console.log("mouse entered: ", colorInfo)
                       setHoveredColor(colorInfo);
                     }}
                     onMouseLeave={() => {
@@ -237,7 +238,7 @@ const ProductDetail: React.FC = () => {
 
                       setHoveredColor(colorVariant?.color ?? "");
                     }}
-                    onClick={() => handleColorClick(colorInfo)}
+                    onClick={() => handleColorClick(colorInfo, index)}
                   />
                 ))}
               </div>
@@ -251,7 +252,7 @@ const ProductDetail: React.FC = () => {
                 Sizes
               </h2>
               <div className="flex space-x-2">
-                {productSizeVariants.map((size) => (
+                {productSizeVariants.map((size, i) => (
                   <button
                     key={size.id}
                     className={`px-4 py-2 rounded border ${
@@ -260,7 +261,7 @@ const ProductDetail: React.FC = () => {
                         ? "bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-800"
                         : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100"
                     }`}
-                    onClick={() => handleSizeClick(size)}
+                    onClick={() => handleSizeClick(size, i)}
                   >
                     {size.size}
                   </button>
